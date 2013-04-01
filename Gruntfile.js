@@ -1,60 +1,97 @@
-module.exports = function( grunt ) {
+module.exports = function (grunt) {
 
-	"use strict";
+  "use strict";
 
-	grunt.initConfig({
+  grunt.initConfig({
 
-		jshint: {
-			dist: {
-				src: [ "dist/iscroll.js" ]
-			},
-			grunt: {
-				src: [ "Gruntfile.js" ]
-			},
-			modules: {
-				src: [ "src/**/*.js" ]
-			}
-		},
+    jshint: {
+      dist: {
+        src: [ "dist/iscroll-debug.js" ]
+      },
+      grunt: {
+        src: [ "Gruntfile.js" ]
+      },
+      modules: {
+        src: [
+          "src/lib/utils.js",
+          "src/methods/handleEvent.js",
+          "src/methods/reset.js",
+          "src/methods/refresh.js",
+          "src/methods/resetPosition.js",
+          "src/methods/scroll.js",
+          "src/methods/destroy.js",
+          "src/methods/enable.js",
+          "src/methods/disable.js",
+          "src/methods/_resize.js",
+          "src/methods/_start.js",
+          "src/methods/_move.js",
+          "src/methods/_end.js",
+          "src/methods/_translate.js",
+          "src/methods/_transitionEnd.js",
+          "src/methods/_transitionTime.js"
+        ]
+      }
+    },
 
-		concat: {
-			build: {
-				src: ["src/iscroll.js", "src/**/*.js"],
-				dest: "dist/iscroll.js",
-				options: {
-					banner: "/*!\n * iScroll v5.0.0 pre-alpha-use-it-and-kittens-die ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org\n * Released under MIT license, http://cubiq.org/license\n */\n"
-				}
-			}
-		},
+    concat: {
+      build: {
+        src: [
+          "src/intro.js",
+          "src/iscroll.js",
+          "src/lib/utils.js",
+          "src/methods/handleEvent.js",
+          "src/methods/reset.js",
+          "src/methods/refresh.js",
+          "src/methods/resetPosition.js",
+          "src/methods/scroll.js",
+          "src/methods/destroy.js",
+          "src/methods/enable.js",
+          "src/methods/disable.js",
+          "src/methods/_resize.js",
+          "src/methods/_start.js",
+          "src/methods/_move.js",
+          "src/methods/_end.js",
+          "src/methods/_translate.js",
+          "src/methods/_transitionEnd.js",
+          "src/methods/_transitionTime.js",
+          "src/outro.js"
+        ],
+        dest: "dist/iscroll-debug.js",
+        options: {
+          banner: "/*!\n * iScroll v5.0.0 pre-alpha-use-it-and-kittens-die ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org\n * Released under MIT license, http://cubiq.org/license\n */\n"
+        }
+      }
+    },
 
-		uglify: {
-			all: {
-				files: {
-					"dist/iscroll.min.js": [ "<%= concat.build.dest %>" ]
-				},
-				options: {
-					sourceMap: "dist/iscroll.min.map",
-					beautify: {
-						ascii_only: true
-					}
-				}
-			}
-		},
+    uglify: {
+      all: {
+        files: {
+          "dist/iscroll.js": [ "<%= concat.build.dest %>" ]
+        },
+        options: {
+          sourceMap: "dist/iscroll.map",
+          beautify: {
+            ascii_only: true
+          }
+        }
+      }
+    },
 
-		watch: {
-			files: [ "<%= jshint.grunt.src %>", "<%= jshint.modules.src %>" ],
-			tasks: "default"
-		}
-	});
+    watch: {
+      files: [ "<%= jshint.grunt.src %>", "<%= jshint.modules.src %>" ],
+      tasks: "default"
+    }
+  });
 
-	// Load grunt tasks from NPM packages
-	grunt.loadNpmTasks("grunt-contrib-watch");
-	grunt.loadNpmTasks("grunt-contrib-jshint");
-	grunt.loadNpmTasks("grunt-contrib-uglify");
-	grunt.loadNpmTasks("grunt-contrib-concat");
+  // Load grunt tasks from NPM packages
+  grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
+  grunt.loadNpmTasks("grunt-contrib-concat");
 
-	// Default grunt
-	grunt.registerTask( "default", [ "concat", "jshint" ] );
+  // Default grunt
+  grunt.registerTask("default", [ "concat", "jshint" ]);
 
-	// // Short list as a high frequency watch task
-	grunt.registerTask( "build", [ "default", "uglify" ] );
+  // // Short list as a high frequency watch task
+  grunt.registerTask("build", [ "default", "uglify" ]);
 };
