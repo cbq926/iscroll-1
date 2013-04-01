@@ -1,16 +1,19 @@
 {
-  "name": "iScroll",
+  "name": "iscroll",
   "title": "iScroll",
+  "root": "handy",
   "description": "",
-  "version": "5.0.0-pre",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cubiq/iscroll.git"
+    "url": "https://github.com/handyjs/iscroll.git"
   },
   "bugs": {
-    "url": "http://github.com/cubiq/iscroll/issues"
+    "url": "https://github.com/handyjs/iscroll/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "$": "$"
+  },
   "devDependencies": {
     "grunt-contrib-watch": "~0.3.1",
     "grunt-contrib-jshint": "~0.3.0",
