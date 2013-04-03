@@ -1,7 +1,3 @@
-/*!
- * iScroll v5.0.0 pre-alpha-use-it-and-kittens-die ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org
- * Released under MIT license, http://cubiq.org/license
- */
 define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exports, module) {
     var $ = require("$-debug"), support = $.support;
     var IScroll = function(el, options) {

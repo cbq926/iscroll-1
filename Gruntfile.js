@@ -56,10 +56,7 @@ module.exports = function (grunt) {
           "src/methods/_transitionTime.js",
           "src/outro.js"
         ],
-        dest: ".build/iscroll.js",
-        options: {
-          banner: "/*!\n * iScroll v5.0.0 pre-alpha-use-it-and-kittens-die ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org\n * Released under MIT license, http://cubiq.org/license\n */\n"
-        }
+        dest: ".build/iscroll.js"
       }
     },
 
@@ -77,25 +74,13 @@ module.exports = function (grunt) {
       all: {
         files: {
           "dist/iscroll.js": ['dist/iscroll.js']
-        },
-        options: {
-          sourceMap: "dist/iscroll.map",
-          beautify: {
-            ascii_only: true
-          }
         }
       }
-    },
-
-    watch: {
-      files: [ "<%= jshint.grunt.src %>", "<%= jshint.modules.src %>" ],
-      tasks: "default"
     }
   });
 
   // Load grunt tasks from NPM packages
   grunt.loadNpmTasks("grunt-cmd-transport");
-  grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-concat");
