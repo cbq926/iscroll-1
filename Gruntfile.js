@@ -3,10 +3,10 @@ module.exports = function (grunt) {
   "use strict";
 
   grunt.initConfig({
-
+    pkg: grunt.file.readJSON('package.json'),
     jshint: {
       dist: {
-        src: [ "dist/iscroll-debug.js" ]
+        src: [ "build/<%= pkg.name %>.js" ]
       },
       grunt: {
         src: [ "Gruntfile.js" ]
@@ -56,25 +56,26 @@ module.exports = function (grunt) {
           "src/methods/_transitionTime.js",
           "src/outro.js"
         ],
-        dest: ".build/iscroll.js"
+        dest: "build/<%= pkg.name %>.js"
       }
     },
 
     transport: {
       all: {
-        files: [{
-          cwd: '.build',
-          src: '*.js',
-          dest: 'dist'
-        }]
+        files: [
+          {
+            cwd: 'build',
+            src: '*.js',
+            dest: 'dist'
+          }
+        ]
       }
     },
 
     uglify: {
-      all: {
-        files: {
-          "dist/iscroll.js": ['dist/iscroll.js']
-        }
+      build: {
+        src: 'dist/<%= pkg.name %>.js',
+        dest: 'dist/<%= pkg.name %>.js'
       }
     }
   });
@@ -85,6 +86,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-concat");
 
-  // Default grunt
-  grunt.registerTask("default", [ "concat", "transport", "jshint", "uglify" ]);
+  // Default grunt with transport
+  grunt.registerTask("default", [ "concat", "jshint", "transport", "uglify" ]);
+
+  // Build grunt for dev
+  grunt.registerTask("build", [ "concat", "jshint", "uglify" ]);
 };
