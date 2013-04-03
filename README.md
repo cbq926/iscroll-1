@@ -4,5 +4,5 @@
 
 ## 打包命令
 
-    grunt build    
+    grunt    
 
