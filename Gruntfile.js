@@ -101,8 +101,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-concat");
 
   // Default grunt
-  grunt.registerTask("default", [ "concat", "transport", "jshint" ]);
-
-  // // Short list as a high frequency watch task
-  grunt.registerTask("build", [ "default", "uglify" ]);
+  grunt.registerTask("default", [ "concat", "transport", "jshint", "uglify" ]);
 };
