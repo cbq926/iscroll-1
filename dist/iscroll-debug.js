@@ -43,7 +43,7 @@ define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exp
         function removeEvent(el, type, fn, capture) {
             el.removeEventListener(type, fn, !!capture);
         }
-        function getComputedPosition(el, useTransform) {
+        function getComputedPosition(el) {
             var matrix = getComputedStyle(el, null), x, y;
             //if ( useTransform ) {
             matrix = matrix[style.transform].split(")")[0].split(", ");
@@ -97,12 +97,7 @@ define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exp
             scrollY: true,
             lockDirection: true,
             overshoot: true,
-            momentum: true,
-            //eventPassthrough: false,	TODO: preserve native vertical scroll on horizontal JS scroll (and vice versa)
-            HWCompositing: true,
-            // set to false to skip the hardware compositing
-            useTransition: true,
-            useTransform: true
+            momentum: true
         };
         var events = {};
         if (has.touch) {
@@ -188,9 +183,9 @@ define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exp
         this.scrollerStyle = this.scroller.style;
         // cache style for better performance
         // Normalize options
-        if (!this.options.HWCompositing) {
-            utils.style.translateZ = "";
-        }
+        //if (!this.options.HWCompositing) {
+        //utils.style.translateZ = '';
+        //}
         // default easing
         if (support.transition) {
             this.scrollerStyle[utils.style.transitionTimingFunction] = "cubic-bezier(0.33,0.66,0.66,1)";
@@ -277,10 +272,11 @@ define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exp
         this.distX = 0;
         this.distY = 0;
         this.directionLocked = 0;
+        this.refresh();
         this._transitionTime();
         this.isAnimating = false;
         if (this.options.momentum) {
-            pos = IScroll.utils.getComputedPosition(this.scroller, this.options.useTransform);
+            pos = IScroll.utils.getComputedPosition(this.scroller);
             if (pos.x != this.x || pos.y != this.y) {
                 this._translate(pos.x, pos.y);
             }

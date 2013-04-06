@@ -11,9 +11,9 @@ IScroll.prototype.reset = function (options) {
   this.scrollerStyle = this.scroller.style;		// cache style for better performance
 
   // Normalize options
-  if (!this.options.HWCompositing) {
-    utils.style.translateZ = '';
-  }
+  //if (!this.options.HWCompositing) {
+    //utils.style.translateZ = '';
+  //}
 
   // default easing
   if (support.transition) {

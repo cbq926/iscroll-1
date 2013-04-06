@@ -39,7 +39,7 @@ IScroll.utils = (function () {
     el.removeEventListener(type, fn, !!capture);
   }
 
-  function getComputedPosition(el, useTransform) {
+  function getComputedPosition(el/*, useTransform*/) {
     var matrix = getComputedStyle(el, null),
       x, y;
 
@@ -105,12 +105,12 @@ IScroll.utils = (function () {
     scrollY: true,
     lockDirection: true,
     overshoot: true,
-    momentum: true,
+    momentum: true
     //eventPassthrough: false,	TODO: preserve native vertical scroll on horizontal JS scroll (and vice versa)
 
-    HWCompositing: true,		// set to false to skip the hardware compositing
-    useTransition: true,
-    useTransform: true
+    //HWCompositing: true,		// set to false to skip the hardware compositing
+    //useTransition: true,
+    //useTransform: true
   };
 
   var events = {};

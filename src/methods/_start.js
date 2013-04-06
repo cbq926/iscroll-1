@@ -20,12 +20,13 @@ IScroll.prototype._start = function (e) {
   this.distY = 0;
   this.directionLocked = 0;
 
+  this.refresh();
   this._transitionTime();
 
   this.isAnimating = false;
 
   if (this.options.momentum) {
-    pos = IScroll.utils.getComputedPosition(this.scroller, this.options.useTransform);
+    pos = IScroll.utils.getComputedPosition(this.scroller/*, this.options.useTransform*/);
 
     if (pos.x != this.x || pos.y != this.y) {
       this._translate(pos.x, pos.y);
