@@ -266,6 +266,9 @@ define("handy/iscroll/1.0.0/iscroll-debug", [ "$-debug" ], function(require, exp
         if (this.initiated && e.type != this.initiated) {
             return;
         }
+        if ($(e.target).closest(this.options.scroller).length === 0) {
+            return;
+        }
         var utils = IScroll.utils, events = utils.events, point = e.touches ? e.touches[0] : e, pos;
         this.initiated = e.type;
         this.moved = false;
