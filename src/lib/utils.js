@@ -10,25 +10,10 @@ IScroll.utils = (function () {
   //  window.msRequestAnimationFrame    ||
   //  function (callback) { window.setTimeout(callback, 1000 / 60); };
 
-  //var _vendor = (function () {
-  //  var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
-  //    transform,
-  //    i = 0,
-  //    l = vendors.length;
-  //
-  //  for ( ; i < l; i++ ) {
-  //    transform = vendors[i] + 'ransform';
-  //    if ( transform in _dummyStyle ) return vendors[i].substr(0, vendors[i].length-1);
-  //  }
-  //
-  //  return false;
-  //})();
-  var vendor = support.vendor;
+  var prefix = support.prefix;
 
-  function _prefixStyle(style) {
-    if (vendor === '')
-      return style.toLowerCase();
-    return vendor + style;
+  function prefixStyle(style) {
+    return prefix.style ? (prefix.style + style.charAt(0).toUpperCase() + style.slice(1)) : style;
   }
 
   function addEvent(el, type, fn, capture) {
@@ -81,7 +66,7 @@ IScroll.utils = (function () {
     };
   }
 
-  var _transform = _prefixStyle('Transform');
+  var _transform = prefixStyle('Transform');
 
   var has = {
     transform: support.transform,
@@ -93,8 +78,8 @@ IScroll.utils = (function () {
 
   var style = {
     transform: _transform,
-    transitionTimingFunction: _prefixStyle('TransitionTimingFunction'),
-    transitionDuration: _prefixStyle('TransitionDuration'),
+    transitionTimingFunction: prefixStyle('TransitionTimingFunction'),
+    transitionDuration: prefixStyle('TransitionDuration'),
     translateZ: has.trans3d ? ' translateZ(0)' : ''
   };
 
@@ -137,7 +122,7 @@ IScroll.utils = (function () {
     };
   }
   events.TRANSITIONEND = (function () {
-    switch (vendor) {
+    switch (prefix.style) {
       case 'webkit':
         return 'webkitTransitionEnd';
       case 'O':
