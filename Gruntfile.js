@@ -1,63 +1,62 @@
 module.exports = function (grunt) {
-
-  "use strict";
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    jshint: {
-      dist: {
-        src: [ "build/<%= pkg.name %>.js" ]
-      },
-      grunt: {
-        src: [ "Gruntfile.js" ]
-      },
-      modules: {
+
+    concat: {
+      iscroll: {
+        dest: 'build/iscroll.js',
         src: [
-          "src/lib/utils.js",
-          "src/methods/handleEvent.js",
-          "src/methods/reset.js",
-          "src/methods/refresh.js",
-          "src/methods/resetPosition.js",
-          "src/methods/scroll.js",
-          "src/methods/destroy.js",
-          "src/methods/enable.js",
-          "src/methods/disable.js",
-          "src/methods/_resize.js",
-          "src/methods/_start.js",
-          "src/methods/_move.js",
-          "src/methods/_end.js",
-          "src/methods/_translate.js",
-          "src/methods/_transitionEnd.js",
-          "src/methods/_transitionTime.js"
+          'src/open.js',
+          'src/utils.js',
+          'src/core.js',
+          'src/default/*.js',
+          'src/move/*.js',
+          'src/close.js'
+        ]
+      },
+      lite: {
+        dest: 'build/iscroll-lite.js',
+        src: [
+          'src/open.js',
+          'src/utils.js',
+          'src/core.js',
+          'src/lite/*.js',
+          'src/move/handleEvent.js',
+          'src/default/_initEvents.js',
+          'src/default/_translate.js',
+          'src/default/getComputedPosition.js',
+          'src/close.js'
+        ]
+      },
+      zoom: {
+        dest: 'build/iscroll-zoom.js',
+        src: [
+          'src/open.js',
+          'src/utils.js',
+          'src/core.js',
+          'src/default/*.js',
+          'src/zoom/*.js',
+          'src/close.js'
+        ]
+      },
+      iphone: {
+        dest: 'build/iscroll-iphone.js',
+        src: [
+          'src/open.js',
+          'src/utils.js',
+          'src/core.js',
+          'src/move/handleEvent.js',
+          'src/default/indicator.js',
+          'src/default/transitionProp.js',
+          'src/default/_init.js',
+          'src/iphone/*.js',
+          'src/close.js'
         ]
       }
     },
 
-    concat: {
-      build: {
-        src: [
-          "src/intro.js",
-          "src/iscroll.js",
-          "src/lib/utils.js",
-          "src/methods/handleEvent.js",
-          "src/methods/reset.js",
-          "src/methods/refresh.js",
-          "src/methods/resetPosition.js",
-          "src/methods/scroll.js",
-          "src/methods/destroy.js",
-          "src/methods/enable.js",
-          "src/methods/disable.js",
-          "src/methods/_resize.js",
-          "src/methods/_start.js",
-          "src/methods/_move.js",
-          "src/methods/_end.js",
-          "src/methods/_translate.js",
-          "src/methods/_transitionEnd.js",
-          "src/methods/_transitionTime.js",
-          "src/outro.js"
-        ],
-        dest: "build/<%= pkg.name %>.js"
-      }
+    jshint: {
+      dist: ['build/*.js']
     },
 
     transport: {
@@ -71,24 +70,28 @@ module.exports = function (grunt) {
         ]
       }
     },
-
     uglify: {
       build: {
         src: 'dist/<%= pkg.name %>.js',
         dest: 'dist/<%= pkg.name %>.js'
       }
+    },
+
+    watch: {
+      files: [ 'src/**/*.js' ],
+      tasks: 'concat'
     }
   });
 
-  // Load grunt tasks from NPM packages
-  grunt.loadNpmTasks("grunt-cmd-transport");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-contrib-concat");
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-cmd-transport');
 
-  // Default grunt with transport
-  grunt.registerTask("default", [ "concat", "jshint", "transport", "uglify" ]);
-
-  // Build grunt for dev
-  grunt.registerTask("build", [ "concat", "jshint", "uglify" ]);
+  grunt.registerTask('iscroll', ['concat:iscroll']);
+  grunt.registerTask('lite', ['concat:lite']);
+  grunt.registerTask('zoom', ['concat:zoom']);
+  grunt.registerTask('iphone', ['concat:iphone']);
+  grunt.registerTask('dist', ['concat', 'jshint', 'transport', 'uglify']);
 };
