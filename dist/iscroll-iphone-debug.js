@@ -174,7 +174,7 @@ define("handy/iscroll/5.0.0/iscroll-iphone-debug", [], function(require, exports
                 bounce: true,
                 bounceTime: 600,
                 bounceEasing: "circular",
-                preventDefault: true,
+                preventDefault: false,
                 eventPassthrough: false,
                 HWCompositing: true,
                 useTransition: true,

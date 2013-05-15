@@ -215,7 +215,7 @@ function iScroll (el, options) {
 		bounceTime: 600,
 		bounceEasing: 'circular',
 
-		preventDefault: true,
+		preventDefault: false,
 		eventPassthrough: false,
 
 		HWCompositing: true,
@@ -269,7 +269,7 @@ function iScroll (el, options) {
 	this.scale = 1;
 
 	this._init();
-	this.refresh();
+	//this.refresh();
 
 	this.scrollTo(this.options.startX, this.options.startY);
 	this.enable();

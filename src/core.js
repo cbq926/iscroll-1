@@ -16,7 +16,7 @@ function iScroll (el, options) {
 		bounceTime: 600,
 		bounceEasing: 'circular',
 
-		preventDefault: true,
+		preventDefault: false,
 		eventPassthrough: false,
 
 		HWCompositing: true,
