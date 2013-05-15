@@ -1,2 +1,2 @@
 define(function (require, exports, module) {
-var iScroll = (function (window, document, Math) {
+return (function (window, document, Math) {

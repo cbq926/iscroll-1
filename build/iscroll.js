@@ -1,5 +1,5 @@
 define(function (require, exports, module) {
-var iScroll = (function (window, document, Math) {
+return (function (window, document, Math) {
 
 
 var rAF = window.requestAnimationFrame	||
@@ -310,6 +310,7 @@ iScroll.prototype._start = function (e) {
 	this.directionY = 0;
 	this.directionLocked = 0;
 
+  this.refresh();
 	this._transitionTime();
 	
 	this.isAnimating = false;
@@ -1510,8 +1511,6 @@ iScroll.prototype.handleEvent = function (e) {
 };
 
 iScroll.ease = utils.ease;
-
-})(window, document, Math);
-
 return iScroll;
+})(window, document, Math);
 });

@@ -72,8 +72,12 @@ module.exports = function (grunt) {
     },
     uglify: {
       build: {
-        src: 'dist/<%= pkg.name %>.js',
-        dest: 'dist/<%= pkg.name %>.js'
+        files: {
+          'dist/iscroll.js': ['dist/iscroll.js'],
+          'dist/iscroll-lite.js': ['dist/iscroll-lite.js'],
+          'dist/iscroll-iphone.js': ['dist/iscroll-iphone.js'],
+          'dist/iscroll-zoom.js': ['dist/iscroll-zoom.js']
+        }
       }
     },
 

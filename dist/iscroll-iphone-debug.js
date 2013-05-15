@@ -1,5 +1,5 @@
 define("handy/iscroll/5.0.0/iscroll-iphone-debug", [], function(require, exports, module) {
-    var iScroll = function(window, document, Math) {
+    return function(window, document, Math) {
         var rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
             window.setTimeout(callback, 1e3 / 60);
         };
@@ -243,6 +243,7 @@ define("handy/iscroll/5.0.0/iscroll-iphone-debug", [], function(require, exports
             this.directionX = 0;
             this.directionY = 0;
             this.directionLocked = 0;
+            this.refresh();
             this._transitionTime();
             this.isAnimating = false;
             this.startTime = utils.getTime();
@@ -869,6 +870,6 @@ define("handy/iscroll/5.0.0/iscroll-iphone-debug", [], function(require, exports
             };
         };
         iScroll.ease = utils.ease;
+        return iScroll;
     }(window, document, Math);
-    return iScroll;
 });

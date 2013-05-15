@@ -70,7 +70,7 @@ function iScroll (el, options) {
 	this.scale = 1;
 
 	this._init();
-	this.refresh();
+	//this.refresh();
 
 	this.scrollTo(this.options.startX, this.options.startY);
 	this.enable();
