@@ -111,6 +111,7 @@ iScroll.prototype._start = function (e) {
 	this.directionY = 0;
 	this.directionLocked = 0;
 
+  this.refresh();
 	this._transitionTime();
 	
 	this.isAnimating = false;

@@ -213,7 +213,7 @@ define("handy/iscroll/5.0.0/iscroll-debug", [], function(require, exports, modul
             this._events = {};
             this.scale = 1;
             this._init();
-            this.refresh();
+            //this.refresh();
             this.scrollTo(this.options.startX, this.options.startY);
             this.enable();
         }
