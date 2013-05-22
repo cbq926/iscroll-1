@@ -259,71 +259,6 @@ define("handy/iscroll/5.0.0/iscroll-zoom-debug", [], function(require, exports, 
             this.pointX = point.pageX;
             this.pointY = point.pageY;
         };
-        iScroll.prototype._move = function(e) {
-            if (!this.enabled || utils.eventType[e.type] !== this.initiated) {
-                return;
-            }
-            if (this.options.preventDefault) {
-                // increases performance on Android? TODO: check!
-                e.preventDefault();
-            }
-            var point = e.touches ? e.touches[0] : e, deltaX = point.pageX - this.pointX, deltaY = point.pageY - this.pointY, timestamp = utils.getTime(), newX, newY, absDistX, absDistY;
-            this.pointX = point.pageX;
-            this.pointY = point.pageY;
-            this.distX += deltaX;
-            this.distY += deltaY;
-            absDistX = Math.abs(this.distX);
-            absDistY = Math.abs(this.distY);
-            // We need to move at least 10 pixels for the scrolling to initiate
-            if (timestamp - this.endTime > 300 && absDistX < 10 && absDistY < 10) {
-                return;
-            }
-            // If you are scrolling in one direction lock the other
-            if (!this.directionLocked && this.options.lockDirection) {
-                if (absDistX > absDistY + this.directionLockThreshold) {
-                    this.directionLocked = "h";
-                } else if (absDistY >= absDistX + this.directionLockThreshold) {
-                    this.directionLocked = "v";
-                } else {
-                    this.directionLocked = "n";
-                }
-            }
-            if (this.directionLocked == "h") {
-                if (this.options.eventPassthrough == "vertical") {
-                    e.preventDefault();
-                } else if (this.options.eventPassthrough == "horizontal") {
-                    this.initiated = false;
-                    return;
-                }
-                deltaY = 0;
-            } else if (this.directionLocked == "v") {
-                if (this.options.eventPassthrough == "horizontal") {
-                    e.preventDefault();
-                } else if (this.options.eventPassthrough == "vertical") {
-                    this.initiated = false;
-                    return;
-                }
-                deltaX = 0;
-            }
-            newX = this.x + (this.hasHorizontalScroll ? deltaX : 0);
-            newY = this.y + (this.hasVerticalScroll ? deltaY : 0);
-            // Slow down if outside of the boundaries
-            if (newX > 0 || newX < this.maxScrollX) {
-                newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
-            }
-            if (newY > 0 || newY < this.maxScrollY) {
-                newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
-            }
-            this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
-            this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
-            this.moved = true;
-            if (timestamp - this.startTime > 300) {
-                this.startTime = timestamp;
-                this.startX = this.x;
-                this.startY = this.y;
-            }
-            this._translate(newX, newY);
-        };
         iScroll.prototype._end = function(e) {
             if (!this.enabled || utils.eventType[e.type] !== this.initiated) {
                 return;
@@ -375,28 +310,6 @@ define("handy/iscroll/5.0.0/iscroll-zoom-debug", [], function(require, exports, 
                 return;
             }
             this._execCustomEvent("scrollEnd");
-        };
-        iScroll.prototype._animate = function(destX, destY, duration, easingFn) {
-            var that = this, startX = this.x, startY = this.y, startTime = utils.getTime(), destTime = startTime + duration;
-            function step() {
-                var now = utils.getTime(), newX, newY, easing;
-                if (now >= destTime) {
-                    that.isAnimating = false;
-                    that._translate(destX, destY);
-                    that.resetPosition(that.options.bounceTime);
-                    return;
-                }
-                now = (now - startTime) / duration;
-                easing = easingFn(now);
-                newX = (destX - startX) * easing + startX;
-                newY = (destY - startY) * easing + startY;
-                that._translate(newX, newY);
-                if (that.isAnimating) {
-                    rAF(step);
-                }
-            }
-            this.isAnimating = true;
-            step();
         };
         iScroll.prototype._resize = function() {
             var that = this;
@@ -501,6 +414,9 @@ define("handy/iscroll/5.0.0/iscroll-zoom-debug", [], function(require, exports, 
             }
             if (this.options.zoom) {
                 this._initZoom();
+            }
+            if (this.options.probeType) {
+                this._initProbe();
             }
         };
         iScroll.prototype._initEvents = function(remove) {
@@ -1084,11 +1000,11 @@ define("handy/iscroll/5.0.0/iscroll-zoom-debug", [], function(require, exports, 
         };
         iScroll.prototype._wheel = function(e) {
             var wheelDeltaX, wheelDeltaY, newX, newY, that = this;
-            // Execute the scroll end event after 500ms of wheel scrolling
+            // Execute the scroll end event after 400ms the wheel stopped scrolling
             clearTimeout(this.wheelTimeout);
             this.wheelTimeout = setTimeout(function() {
                 that._execCustomEvent("scrollEnd");
-            }, 500);
+            }, 400);
             e.preventDefault();
             if ("wheelDeltaX" in e) {
                 wheelDeltaX = e.wheelDeltaX / 10;
@@ -1116,6 +1032,93 @@ define("handy/iscroll/5.0.0/iscroll-zoom-debug", [], function(require, exports, 
                 newY = this.maxScrollY;
             }
             this.scrollTo(newX, newY, 0);
+        };
+        iScroll.prototype._animate = function(destX, destY, duration, easingFn) {
+            var that = this, startX = this.x, startY = this.y, startTime = utils.getTime(), destTime = startTime + duration;
+            function step() {
+                var now = utils.getTime(), newX, newY, easing;
+                if (now >= destTime) {
+                    that.isAnimating = false;
+                    that._translate(destX, destY);
+                    that.resetPosition(that.options.bounceTime);
+                    return;
+                }
+                now = (now - startTime) / duration;
+                easing = easingFn(now);
+                newX = (destX - startX) * easing + startX;
+                newY = (destY - startY) * easing + startY;
+                that._translate(newX, newY);
+                if (that.isAnimating) {
+                    rAF(step);
+                }
+            }
+            this.isAnimating = true;
+            step();
+        };
+        iScroll.prototype._move = function(e) {
+            if (!this.enabled || utils.eventType[e.type] !== this.initiated) {
+                return;
+            }
+            if (this.options.preventDefault) {
+                // increases performance on Android? TODO: check!
+                e.preventDefault();
+            }
+            var point = e.touches ? e.touches[0] : e, deltaX = point.pageX - this.pointX, deltaY = point.pageY - this.pointY, timestamp = utils.getTime(), newX, newY, absDistX, absDistY;
+            this.pointX = point.pageX;
+            this.pointY = point.pageY;
+            this.distX += deltaX;
+            this.distY += deltaY;
+            absDistX = Math.abs(this.distX);
+            absDistY = Math.abs(this.distY);
+            // We need to move at least 10 pixels for the scrolling to initiate
+            if (timestamp - this.endTime > 300 && absDistX < 10 && absDistY < 10) {
+                return;
+            }
+            // If you are scrolling in one direction lock the other
+            if (!this.directionLocked && this.options.lockDirection) {
+                if (absDistX > absDistY + this.directionLockThreshold) {
+                    this.directionLocked = "h";
+                } else if (absDistY >= absDistX + this.directionLockThreshold) {
+                    this.directionLocked = "v";
+                } else {
+                    this.directionLocked = 0;
+                }
+            }
+            if (this.directionLocked == "h") {
+                if (this.options.eventPassthrough == "vertical") {
+                    e.preventDefault();
+                } else if (this.options.eventPassthrough == "horizontal") {
+                    this.initiated = false;
+                    return;
+                }
+                deltaY = 0;
+            } else if (this.directionLocked == "v") {
+                if (this.options.eventPassthrough == "horizontal") {
+                    e.preventDefault();
+                } else if (this.options.eventPassthrough == "vertical") {
+                    this.initiated = false;
+                    return;
+                }
+                deltaX = 0;
+            }
+            newX = this.x + (this.hasHorizontalScroll ? deltaX : 0);
+            newY = this.y + (this.hasVerticalScroll ? deltaY : 0);
+            // Slow down if outside of the boundaries
+            if (newX > 0 || newX < this.maxScrollX) {
+                newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+            }
+            if (newY > 0 || newY < this.maxScrollY) {
+                newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+            }
+            this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
+            this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
+            this.moved = true;
+            this._translate(newX, newY);
+            if (timestamp - this.startTime > 300) {
+                this.startTime = timestamp;
+                this.startX = this.x;
+                this.startY = this.y;
+            }
         };
         iScroll.prototype._translate = function(x, y) {
             if (this.options.useTransform) {

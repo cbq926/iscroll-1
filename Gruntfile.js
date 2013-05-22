@@ -21,9 +21,8 @@ module.exports = function (grunt) {
           'src/utils.js',
           'src/core.js',
           'src/lite/*.js',
-          'src/move/handleEvent.js',
+          'src/move/*.js',
           'src/default/_initEvents.js',
-          'src/default/_translate.js',
           'src/default/getComputedPosition.js',
           'src/close.js'
         ]
@@ -35,7 +34,22 @@ module.exports = function (grunt) {
           'src/utils.js',
           'src/core.js',
           'src/default/*.js',
+          'src/move/_animate.js',
+          'src/move/_move.js',
           'src/zoom/*.js',
+          'src/close.js'
+        ]
+      },
+      probe: {
+        dest: 'build/iscroll-probe.js',
+        src: [
+          'src/open.js',
+          'src/utils.js',
+          'src/core.js',
+          'src/default/*.js',
+          'src/move/handleEvent.js',
+          'src/move/_translate.js',
+          'src/probe/*.js',
           'src/close.js'
         ]
       },
@@ -76,6 +90,7 @@ module.exports = function (grunt) {
           'dist/iscroll.js': ['dist/iscroll.js'],
           'dist/iscroll-lite.js': ['dist/iscroll-lite.js'],
           'dist/iscroll-iphone.js': ['dist/iscroll-iphone.js'],
+          'dist/iscroll-probe.js': ['dist/iscroll-probe.js'],
           'dist/iscroll-zoom.js': ['dist/iscroll-zoom.js']
         }
       }
@@ -96,6 +111,7 @@ module.exports = function (grunt) {
   grunt.registerTask('iscroll', ['concat:iscroll']);
   grunt.registerTask('lite', ['concat:lite']);
   grunt.registerTask('zoom', ['concat:zoom']);
+  grunt.registerTask('probe', ['concat:probe']);
   grunt.registerTask('iphone', ['concat:iphone']);
   grunt.registerTask('dist', ['concat', 'jshint', 'transport', 'uglify']);
 };
